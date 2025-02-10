@@ -68,7 +68,7 @@ public class AgendamentoController {
         });
     }
     
-        @FXML
+    @FXML
     private void salvarAgendamento() {
         try {
             if (!validarCampos()) {
