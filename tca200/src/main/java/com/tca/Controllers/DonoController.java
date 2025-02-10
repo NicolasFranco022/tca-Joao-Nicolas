@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.TextField;
@@ -13,6 +14,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DonoController {
 
@@ -67,12 +70,20 @@ public class DonoController {
 
         try {
             donoDAO.inserirDono(novoDono);
-            System.out.println("Dono cadastrado com sucesso!");
+            mostrarMensagemSucesso("Dono Cadastrado com sucesso!");
             fecharJanela();
         } catch (SQLException e) {
             System.out.println("Erro ao cadastrar dono: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    private void mostrarMensagemSucesso(String mensagem) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Sucesso");
+        alert.setHeaderText(null);
+        alert.setContentText(mensagem);
+        alert.showAndWait();
     }
 
     @FXML
