@@ -15,8 +15,10 @@
     <TextField fx:id="txtTipo" layoutX="50" layoutY="170" prefWidth="300" promptText="Tipo" />
     <TextField fx:id="txtIdade" layoutX="50" layoutY="220" prefWidth="300" promptText="Idade" />
     
-    <ComboBox fx:id="comboSexo" layoutX="50" layoutY="270" prefWidth="300" />
-    
     <Button fx:id="btnSalvar" layoutX="150" layoutY="330" prefHeight="40" prefWidth="100" text="Salvar" onAction="#salvarPet" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" />
     
+    <Label layoutX="50" layoutY="270" text="Sexo:" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+
+    <Button fx:id="btnMacho" layoutX="120" layoutY="270" text="Macho" onAction="#selecionarMacho" style="-fx-background-color: #D3D3D3; -fx-text-fill: black; -fx-font-weight: bold;" />
+    <Button fx:id="btnFemea" layoutX="200" layoutY="270" text="Fêmea" onAction="#selecionarFemea" style="-fx-background-color: #D3D3D3; -fx-text-fill: black; -fx-font-weight: bold;" />
 </AnchorPane>

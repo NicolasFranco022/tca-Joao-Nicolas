@@ -10,7 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
+import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -20,7 +20,7 @@ import java.util.List;
 public class SelecionarDonoController {
 
     @FXML
-    private ListView<Dono> listViewDonos;
+    private ComboBox<Dono> comboDonos;
 
     @FXML
     private Button btnProximo;
@@ -36,23 +36,22 @@ public class SelecionarDonoController {
     private void carregarDonos() {
         try {
             List<Dono> donos = donoDAO.buscarTodosDonos();
-                
+
             if (donos.isEmpty()) {
                 mostrarAlerta("Nenhum dono cadastrado!", "Cadastre um dono antes de criar um pet.");
                 fecharJanela();
             } else {
                 ObservableList<Dono> donosObservable = FXCollections.observableArrayList(donos);
-                listViewDonos.setItems(donosObservable);
-                listViewDonos.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-                    donoSelecionado = newSelection;
-                });
+                comboDonos.setItems(donosObservable);
+                
+                // Atualizar donoSelecionado quando um dono for escolhido
+                comboDonos.setOnAction(event -> donoSelecionado = comboDonos.getSelectionModel().getSelectedItem());
             }
         } catch (SQLException e) {
             mostrarAlerta("Erro no banco de dados", "Não foi possível carregar os donos.");
-            e.printStackTrace(); // Para depuração
+            e.printStackTrace();
         }
     }
-
 
     @FXML
     private void proximo() {
@@ -88,7 +87,7 @@ public class SelecionarDonoController {
     }
 
     private void fecharJanela() {
-        Stage stage = (Stage) listViewDonos.getScene().getWindow();
+        Stage stage = (Stage) comboDonos.getScene().getWindow();
         stage.close();
     }
 }

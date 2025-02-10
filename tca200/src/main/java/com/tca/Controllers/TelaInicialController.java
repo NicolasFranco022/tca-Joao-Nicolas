@@ -80,7 +80,7 @@ public class TelaInicialController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/tca/Views/TelaSelecionarDono.fxml"));
             Parent root = loader.load();
-
+            
             Stage stage = new Stage();
             stage.setScene(new Scene(root, 400, 300));
             stage.setTitle("Selecionar Dono");
@@ -90,4 +90,5 @@ public class TelaInicialController {
             e.printStackTrace();
         }
     }
+
 }
