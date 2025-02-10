@@ -85,4 +85,9 @@ public class Pet {
     public void setDono(Dono dono) {
         this.dono = dono;
     }
+
+    @Override
+    public String toString() {
+        return this.getNome();
+    }
 }

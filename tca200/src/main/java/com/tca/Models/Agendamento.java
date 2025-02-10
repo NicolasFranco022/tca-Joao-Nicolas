@@ -2,23 +2,20 @@ package com.tca.Models;
 
 import java.time.LocalDate;
 
-
 public class Agendamento {
     private int id;
     private Pet pet;
     private LocalDate dataAgendamento;
     private String motivoConsulta;
-    private Dono dono;
 
     public Agendamento() {}
 
-    public Agendamento(int id, String motivoConsulta, LocalDate dataAgendamento) {
-        this.id = id;
-        this.motivoConsulta = motivoConsulta;
-        this.dataAgendamento = dataAgendamento;
-    }
-
+    // Construtor atualizado para incluir Dono automaticamente do Pet
     public Agendamento(int id, Pet pet, LocalDate dataAgendamento, String motivoConsulta) {
+        if (pet == null || pet.getDono() == null) {
+            throw new IllegalArgumentException("Pet e Dono não podem ser nulos.");
+        }
+
         this.id = id;
         this.pet = pet;
         this.dataAgendamento = dataAgendamento;
@@ -57,11 +54,8 @@ public class Agendamento {
         this.motivoConsulta = motivoConsulta;
     }
 
+    // Dono agora é obtido diretamente do Pet
     public Dono getDono() {
-        return dono;
-    }
-
-    public void setDono(Dono dono) {
-        this.dono = dono;
+        return (pet != null) ? pet.getDono() : null;
     }
 }

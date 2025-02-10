@@ -151,5 +151,33 @@ public class PetDAO {
             }
         }
         return null;
+    }
+    
+    public List<Pet> buscarTodosPets() {
+        List<Pet> pets = new ArrayList<>();
+        String sql = "SELECT * FROM Pet";
+    
+        try (Connection conn = DatabaseConnector.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+    
+            while (rs.next()) {
+                Pet pet = new Pet(
+                        rs.getInt("pet_id"),
+                        rs.getString("pet_nome"),
+                        rs.getString("pet_raca"),
+                        rs.getString("pet_tipo"),
+                        rs.getInt("pet_idade"),
+                        rs.getString("pet_sexo"),
+                        null // O dono será atribuído depois, se necessário
+                );
+                pets.add(pet);
+            }
+    
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    
+        return pets;
     }    
 }

@@ -26,14 +26,14 @@ public class TelaInicialController {
         System.out.println("Clicou no botão Criar Agendamento");
 
         try {   
-            Parent root = FXMLLoader.load(getClass().getResource("/com/tca/Views/TelaCadastrarAgendamento.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/com/tca/Views/TelaSelecionarPet.fxml"));
             Stage stage = (Stage) btnCriarAgendamento.getScene().getWindow();
             stage.setScene(new Scene(root, 600, 860));
             stage.centerOnScreen();
-            stage.setTitle("Cadastrar Novo Agendamento");
+            stage.setTitle("Selecionar Pet");
             stage.show();      
         } catch (Exception e) {
-            System.out.println("Erro ao trocar para a tela de agendamento: " + e.getMessage());
+            System.out.println("Erro ao trocar para a tela de selecionar pet: " + e.getMessage());
             e.printStackTrace();
         }
     }

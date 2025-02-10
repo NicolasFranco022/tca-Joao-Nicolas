@@ -67,9 +67,6 @@ public class AgendamentoDAO {
         return false;
     }
     
-    
-
-    
     public List<Agendamento> buscarTodosAgendamentos() throws SQLException {
         List<Agendamento> agendamentos = new ArrayList<>();
         String sql = "SELECT a.agendamento_id, a.data_agendamento, a.motivo, "

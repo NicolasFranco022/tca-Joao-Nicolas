@@ -1,17 +1,11 @@
 package com.tca.Controllers;
 
-import java.io.IOException;
-
 import com.tca.DAO.PetDAO;
 import com.tca.Models.Dono;
 import com.tca.Models.Pet;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Labeled;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -21,7 +15,7 @@ public class PetController {
     private TextField txtNomePet, txtRaca, txtTipo, txtIdade;
 
     @FXML
-    private Button btnSalvar, btnCancelar, btnMacho, btnFemea;
+    private Button btnSalvar, btnMacho, btnFemea;
 
     private PetDAO petDAO = new PetDAO();
     private Dono donoSelecionado;
@@ -64,12 +58,13 @@ public class PetController {
         String raca = txtRaca.getText().trim();
         String tipo = txtTipo.getText().trim();
         String sexo = sexoSelecionado;
+
         if (sexo == null || sexo.isEmpty()) {
             mostrarAlerta("Erro", "Selecione o sexo do pet.");
             return;
         }
-        int idade;
 
+        int idade;
         try {
             idade = Integer.parseInt(txtIdade.getText().trim());
         } catch (NumberFormatException e) {
@@ -77,7 +72,7 @@ public class PetController {
             return;
         }
 
-        if (nome.isEmpty() || raca.isEmpty() || tipo.isEmpty() || sexo.isEmpty()) {
+        if (nome.isEmpty() || raca.isEmpty() || tipo.isEmpty()) {
             mostrarAlerta("Erro", "Todos os campos devem ser preenchidos.");
             return;
         }
@@ -87,17 +82,11 @@ public class PetController {
         try {
             petDAO.inserirPet(pet);
             mostrarAlerta("Sucesso", "Pet cadastrado com sucesso!");
-
             fecharJanela();
         } catch (Exception e) {
             mostrarAlerta("Erro", "Não foi possível salvar o pet.");
             e.printStackTrace();
         }
-    }
-
-    @FXML
-    private void cancelar() {
-        fecharJanela();
     }
 
     private void mostrarAlerta(String titulo, String mensagem) {
@@ -109,9 +98,7 @@ public class PetController {
     }
 
     private void fecharJanela() {
-        if (btnCancelar != null && btnCancelar.getScene() != null) {
-            Stage stage = (Stage) btnCancelar.getScene().getWindow();
-            stage.close();
-        }
-    }    
+        Stage stage = (Stage) txtNomePet.getScene().getWindow();
+        stage.close();
+    }
 }
