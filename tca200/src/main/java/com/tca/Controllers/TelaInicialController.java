@@ -77,15 +77,16 @@ public class TelaInicialController {
     private void CadastrarPet() {
         System.out.println("Clicou no botão Criar Pet");
 
-        try {   
-            Parent root = FXMLLoader.load(getClass().getResource("/com/tca/Views/TelaCadastrarPet.fxml"));
-            Stage stage = (Stage) btnCriarPet.getScene().getWindow();
-            stage.setScene(new Scene(root, 600, 860));
-            stage.centerOnScreen();
-            stage.setTitle("Cadastrar Novo Pet");
-            stage.show();      
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/tca/Views/TelaSelecionarDono.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root, 400, 300));
+            stage.setTitle("Selecionar Dono");
+            stage.show();
         } catch (Exception e) {
-            System.out.println("Erro ao trocar para a tela de cadastro de pet: " + e.getMessage());
+            System.out.println("Erro ao abrir a tela de selecionar dono: " + e.getMessage());
             e.printStackTrace();
         }
     }
