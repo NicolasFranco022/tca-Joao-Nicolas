@@ -140,19 +140,24 @@ public class AgendamentoDAO {
         }
     }
     
-    public boolean verificarConsultaMesmoDia(LocalDate dataConsulta) {
-        String sql = "SELECT COUNT(*) FROM agendamentos WHERE data_consulta = ?";
+    public boolean existeAgendamentoNaData(LocalDate data) {
+        String sql = "SELECT COUNT(*) FROM Agendamento WHERE data_agendamento = ?";
+    
         try (Connection conn = DatabaseConnector.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setDate(1, Date.valueOf(dataConsulta));
-                ResultSet rs = stmt.executeQuery();
-                if (rs.next()) {
-                    return rs.getInt(1) > 0;
-                }
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setDate(1, Date.valueOf(data));
+            ResultSet rs = stmt.executeQuery();
+    
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Retorna true se já existe um agendamento
+            }
+    
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
+    
 
 }

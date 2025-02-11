@@ -5,6 +5,11 @@
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tca.Controllers.SelecionarPetController">
     <children>
         <ListView fx:id="listViewPets" layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="300.0" />
-        <Button layoutX="100.0" layoutY="220.0" mnemonicParsing="false" onAction="#selecionarPet" text="Selecionar" />
+        
+        <Button fx:id="btnSelecionar" layoutX="100.0" layoutY="220.0" mnemonicParsing="false" 
+                onAction="#selecionarPet" text="Selecionar" />
+        
+        <Button fx:id="btnVoltar" layoutX="200.0" layoutY="220.0" mnemonicParsing="false" 
+                onAction="#voltarTelaInicial" text="Voltar" />
     </children>
 </AnchorPane>

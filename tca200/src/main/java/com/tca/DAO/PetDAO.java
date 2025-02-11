@@ -1,5 +1,6 @@
 package com.tca.DAO;
 
+import com.tca.Models.Dono;
 import com.tca.Models.Pet;
 import com.tca.db.DatabaseConnector;
 
@@ -56,29 +57,42 @@ public class PetDAO {
     }
     
     public Pet buscarPetPorId(int id) throws SQLException {
-        String sql = "SELECT * FROM Pet WHERE pet_id = ?";
+    String sql = "SELECT p.*, d.dono_id, d.dono_nome, d.dono_telefone, d.dono_email " +
+                 "FROM Pet p INNER JOIN Dono d ON p.dono_id = d.dono_id " +
+                 "WHERE p.pet_id = ?";
 
-        try (Connection conn = DatabaseConnector.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+    try (Connection conn = DatabaseConnector.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, id);
+        stmt.setInt(1, id);
 
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    Pet pet = new Pet();
-                    pet.setId(rs.getInt("pet_id"));
-                    pet.setNome(rs.getString("pet_nome"));
-                    pet.setRaca(rs.getString("pet_raca"));
-                    pet.setTipo(rs.getString("pet_tipo"));
-                    pet.setIdade(rs.getInt("pet_idade"));
-                    pet.setSexo(rs.getString("pet_sexo"));
-                    pet.setId(rs.getInt("dono_id"));
-                    return pet;
-                }
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                Dono dono = new Dono(
+                    rs.getInt("dono_id"),
+                    rs.getString("dono_nome"),
+                    rs.getString("dono_telefone"),
+                    rs.getString("dono_email")
+                );
+
+                Pet pet = new Pet(
+                    rs.getInt("pet_id"),
+                    rs.getString("pet_nome"),
+                    rs.getString("pet_raca"),
+                    rs.getString("pet_tipo"),
+                    rs.getInt("pet_idade"),
+                    rs.getString("pet_sexo"),
+                    dono
+                );
+
+                return pet;
             }
         }
-        return null;
     }
+    return null;
+}
+
+    
 
     public List<Pet> buscarPetsPorDonoId(int donoId) {
         List<Pet> pets = new ArrayList<>();
@@ -155,22 +169,31 @@ public class PetDAO {
     
     public List<Pet> buscarTodosPets() {
         List<Pet> pets = new ArrayList<>();
-        String sql = "SELECT * FROM Pet";
+        String sql = "SELECT p.*, d.dono_id, d.dono_nome, d.dono_telefone, d.dono_email " +
+                     "FROM Pet p INNER JOIN Dono d ON p.dono_id = d.dono_id";
     
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
     
             while (rs.next()) {
-                Pet pet = new Pet(
-                        rs.getInt("pet_id"),
-                        rs.getString("pet_nome"),
-                        rs.getString("pet_raca"),
-                        rs.getString("pet_tipo"),
-                        rs.getInt("pet_idade"),
-                        rs.getString("pet_sexo"),
-                        null // O dono será atribuído depois, se necessário
+                Dono dono = new Dono(
+                    rs.getInt("dono_id"),
+                    rs.getString("dono_nome"),
+                    rs.getString("dono_telefone"),
+                    rs.getString("dono_email")
                 );
+    
+                Pet pet = new Pet(
+                    rs.getInt("pet_id"),
+                    rs.getString("pet_nome"),
+                    rs.getString("pet_raca"),
+                    rs.getString("pet_tipo"),
+                    rs.getInt("pet_idade"),
+                    rs.getString("pet_sexo"),
+                    dono
+                );
+    
                 pets.add(pet);
             }
     
@@ -179,5 +202,6 @@ public class PetDAO {
         }
     
         return pets;
-    }    
+    }
+      
 }
