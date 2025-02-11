@@ -13,14 +13,8 @@
     <TableView fx:id="agendamentosTable" prefHeight="411.0" prefWidth="800">
         <columns>
             <TableColumn fx:id="nomeDonoColumn" prefWidth="150" text="Nome do Dono" />
-            <TableColumn fx:id="telefoneDonoColumn" prefWidth="120" text="Telefone" />
-            <TableColumn fx:id="emailDonoColumn" prefWidth="150" text="Email" />
 
             <TableColumn fx:id="nomePetColumn" prefWidth="120" text="Nome do Pet" />
-            <TableColumn fx:id="racaPetColumn" prefWidth="100" text="Raça" />
-            <TableColumn fx:id="tipoPetColumn" prefWidth="100" text="Tipo" />
-            <TableColumn fx:id="idadePetColumn" prefWidth="80" text="Idade" />
-            <TableColumn fx:id="sexoPetColumn" prefWidth="80" text="Sexo" />
 
             <TableColumn fx:id="dataAgendamentoColumn" prefWidth="150" text="Data do Agendamento" />
             <TableColumn fx:id="motivoConsultaColumn" prefWidth="200" text="Motivo" />

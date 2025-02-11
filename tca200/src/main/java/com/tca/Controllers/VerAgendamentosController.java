@@ -1,14 +1,9 @@
 package com.tca.Controllers;
 
 import com.tca.DAO.AgendamentoDAO;
-import com.tca.DAO.DonoDAO;
-import com.tca.DAO.PetDAO;
 import com.tca.Models.Agendamento;
 import com.tca.Models.Dono;
 import com.tca.Models.Pet;
-import com.tca.db.DatabaseConnector;
-
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,15 +11,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -37,26 +31,11 @@ public class VerAgendamentosController {
     @FXML
     private TableColumn<Agendamento, String> nomeDonoColumn;
     @FXML
-    private TableColumn<Agendamento, String> telefoneDonoColumn;
-    @FXML
-    private TableColumn<Agendamento, String> emailDonoColumn;
-
-    @FXML
     private TableColumn<Agendamento, String> nomePetColumn;
-    @FXML
-    private TableColumn<Agendamento, String> racaPetColumn;
-    @FXML
-    private TableColumn<Agendamento, String> tipoPetColumn;
-    @FXML
-    private TableColumn<Agendamento, Integer> idadePetColumn;
-    @FXML
-    private TableColumn<Agendamento, String> sexoPetColumn;
-
     @FXML
     private TableColumn<Agendamento, String> dataAgendamentoColumn;
     @FXML
     private TableColumn<Agendamento, String> motivoConsultaColumn;
-
     @FXML
     private TableColumn<Agendamento, Void> acoesColumn;
 
@@ -64,6 +43,7 @@ public class VerAgendamentosController {
     private Button voltarButton;
 
     private ObservableList<Agendamento> agendamentosList;
+    private final AgendamentoDAO agendamentoDAO = new AgendamentoDAO(); // Instância única do DAO
 
     @FXML
     public void initialize() {
@@ -71,6 +51,53 @@ public class VerAgendamentosController {
         configurarColunas();
         carregarAgendamentos();
         agendamentosTable.setItems(agendamentosList);
+    }
+
+    private void configurarColunas() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        // Nome do Dono
+        nomeDonoColumn.setCellValueFactory(cellData -> {
+            Pet pet = cellData.getValue().getPet();
+            Dono dono = (pet != null) ? pet.getDono() : null;
+            return new SimpleStringProperty((dono != null) ? dono.getNome() : "Desconhecido");
+        });
+
+        // Nome do Pet
+        nomePetColumn.setCellValueFactory(cellData -> {
+            Pet pet = cellData.getValue().getPet();
+            return new SimpleStringProperty((pet != null) ? pet.getNome() : "Desconhecido");
+        });
+
+        // Data do Agendamento (com verificação para evitar NullPointerException)
+        dataAgendamentoColumn.setCellValueFactory(cellData -> {
+            LocalDate data = cellData.getValue().getDataAgendamento();
+            return new SimpleStringProperty((data != null) ? data.format(formatter) : "Não Informado");
+        });
+
+        // Motivo da Consulta
+        motivoConsultaColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMotivoConsulta()));
+
+        // Botão "Ver Motivo"
+        motivoConsultaColumn.setCellFactory(column -> new TableCell<>() {
+            private final Button viewButton = new Button("Ver Motivo");
+
+            {
+                viewButton.setOnAction(event -> {
+                    Agendamento agendamento = getTableView().getItems().get(getIndex());
+                    mostrarMotivoCompleto(agendamento);
+                });
+            }
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                setGraphic(empty ? null : viewButton);
+            }
+        });
+
+        // Coluna de Ações (Alterar e Excluir)
+        acoesColumn.setCellFactory(getAcoesCellFactory());
     }
 
     private Callback<TableColumn<Agendamento, Void>, TableCell<Agendamento, Void>> getAcoesCellFactory() {
@@ -86,138 +113,26 @@ public class VerAgendamentosController {
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(new HBox(5, excluirButton, alterarButton));
-                }
-            }
-        };
-    }
-
-    private Callback<TableColumn<Agendamento, String>, TableCell<Agendamento, String>> getMotivoButtonCellFactory() {
-        return column -> new TableCell<Agendamento, String>() {
-            private final Button viewButton = new Button("Ver Motivo");
-    
-            {
-                viewButton.setOnAction(event -> {
-                    Agendamento agendamento = getTableView().getItems().get(getIndex());
-                    mostrarMotivoCompleto(agendamento);
-                });
-            }
-    
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(viewButton);
-                }
+                setGraphic(empty ? null : new HBox(5, excluirButton, alterarButton));
             }
         };
     }
 
     private void mostrarMotivoCompleto(Agendamento agendamento) {
-        Alert alert = new Alert(AlertType.INFORMATION);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Motivo Completo");
         alert.setHeaderText("Motivo do Agendamento:");
         alert.setContentText(agendamento.getMotivoConsulta());
-    
         alert.showAndWait();
     }
 
-
-    private void configurarColunas() {
-        motivoConsultaColumn.setCellFactory(getMotivoButtonCellFactory());
-
-        motivoConsultaColumn.setCellFactory(column -> new TableCell<Agendamento, String>() {
-            private final Button viewButton = new Button("Ver Motivo");
-    
-            {
-                viewButton.setOnAction(event -> {
-                    Agendamento agendamento = getTableView().getItems().get(getIndex());
-                    mostrarMotivoCompleto(agendamento);
-                });
-            }
-    
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(viewButton);
-                }
-            }
-        });
-    
-        nomeDonoColumn.setCellValueFactory(cellData -> {
-            Pet pet = cellData.getValue().getPet();
-            Dono dono = (pet != null) ? pet.getDono() : null;
-            return new SimpleStringProperty(dono != null && dono.getNome() != null ? dono.getNome() : "Desconhecido");
-        });
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        nomeDonoColumn.setCellValueFactory(cellData -> {
-            Pet pet = cellData.getValue().getPet();
-            Dono dono = (pet != null) ? pet.getDono() : null;
-            return new SimpleStringProperty(dono != null && dono.getNome() != null ? dono.getNome() : "Desconhecido");
-        });
-
-        telefoneDonoColumn.setCellValueFactory(cellData -> {
-            Pet pet = cellData.getValue().getPet();
-            Dono dono = (pet != null) ? pet.getDono() : null;
-            return new SimpleStringProperty(dono != null && dono.getTelefone() != null ? dono.getTelefone() : "Desconhecido");
-        });
-
-        emailDonoColumn.setCellValueFactory(cellData -> {
-            Pet pet = cellData.getValue().getPet();
-            Dono dono = (pet != null) ? pet.getDono() : null;
-            return new SimpleStringProperty(dono != null && dono.getEmail() != null ? dono.getEmail() : "Desconhecido");
-        });
-
-        nomePetColumn.setCellValueFactory(cellData -> {
-            Pet pet = cellData.getValue().getPet();
-            return new SimpleStringProperty(pet != null ? pet.getNome() : "Desconhecido");
-        });
-        racaPetColumn.setCellValueFactory(cellData -> {
-            Pet pet = cellData.getValue().getPet();
-            return new SimpleStringProperty(pet != null ? pet.getRaca() : "Desconhecido");
-        });
-        tipoPetColumn.setCellValueFactory(cellData -> {
-            Pet pet = cellData.getValue().getPet();
-            return new SimpleStringProperty(pet != null ? pet.getTipo() : "Desconhecido");
-        });
-        idadePetColumn.setCellValueFactory(cellData -> {
-            Pet pet = cellData.getValue().getPet();
-            return new SimpleObjectProperty<>(pet != null ? pet.getIdade() : 0);
-        });
-        sexoPetColumn.setCellValueFactory(cellData -> {
-            Pet pet = cellData.getValue().getPet();
-            return new SimpleStringProperty(pet != null ? pet.getSexo() : "Desconhecido");
-        });
-
-        motivoConsultaColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMotivoConsulta()));
-        // Alterado para usar LocalDate
-        dataAgendamentoColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDataAgendamento().format(formatter)));
-
-        acoesColumn.setCellFactory(getAcoesCellFactory());
-    }
-
-    private AgendamentoDAO agendamentoDAO = new AgendamentoDAO();
-    
     public void carregarAgendamentos() {
-
         agendamentosList.clear();
-    
         try {
             List<Agendamento> agendamentos = agendamentoDAO.buscarTodosAgendamentos();
-    
             agendamentosList.addAll(agendamentos);
         } catch (SQLException e) {
-            e.printStackTrace();
+            exibirErro("Erro ao carregar agendamentos", e.getMessage());
         }
     }
 
@@ -235,70 +150,34 @@ public class VerAgendamentosController {
             stage.showAndWait();
 
             carregarAgendamentos();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            exibirErro("Erro ao abrir tela de alteração", e.getMessage());
         }
     }
-    
-    private void handleExcluir(Agendamento agendamento) {
-        AgendamentoDAO agendamentoDAO = new AgendamentoDAO();
-        PetDAO petDAO = new PetDAO();
-        DonoDAO donoDAO = new DonoDAO();
 
+    private void handleExcluir(Agendamento agendamento) {
         Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmAlert.setTitle("Confirmação de Exclusão");
         confirmAlert.setHeaderText("Deseja realmente excluir este agendamento?");
-        confirmAlert.setContentText("Essa ação é irreversível e também excluirá o pet e o dono relacionados.");
-
+        confirmAlert.setContentText("Essa ação é irreversível.");
+    
         Optional<ButtonType> result = confirmAlert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            try (Connection conn = DatabaseConnector.getConnection()) {
-                if (conn == null) {
-                    System.err.println("Erro ao conectar ao banco de dados.");
-                    return;
-                }
-
-                conn.setAutoCommit(false);
-                try {
-                    agendamentoDAO.excluirAgendamento(agendamento.getId());
-                    System.out.println("Agendamento excluído do banco de dados.");
-
-                    Pet pet = agendamento.getPet();
-                    if (pet != null) {
-                        petDAO.excluirPet(pet.getId());
-                        System.out.println("Pet excluído do banco de dados.");
-                    }
-
-                    Dono dono = pet != null ? pet.getDono() : null;
-                    if (dono != null) {
-                        donoDAO.excluirDono(dono.getId());
-                        System.out.println("Dono excluído do banco de dados.");
-                    }
-
-                    conn.commit();
-
-                    agendamentosList.remove(agendamento);
-                    System.out.println("Agendamento removido da tela.");
-
-                    Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-                    successAlert.setTitle("Sucesso");
-                    successAlert.setHeaderText(null);
-                    successAlert.setContentText("Agendamento excluído com sucesso!");
-                    successAlert.showAndWait();
-
-                } catch (SQLException e) {
-                    conn.rollback();
-                    System.err.println("Erro ao excluir agendamento: " + e.getMessage());
-                    e.printStackTrace();
-                }
+            try {
+                agendamentoDAO.excluirAgendamento(agendamento.getId()); // Agora lança SQLException corretamente
+                agendamentosList.remove(agendamento);
+    
+                Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                successAlert.setTitle("Sucesso");
+                successAlert.setHeaderText(null);
+                successAlert.setContentText("Agendamento excluído com sucesso!");
+                successAlert.showAndWait();
             } catch (SQLException e) {
-                e.printStackTrace();
+                exibirErro("Erro ao excluir agendamento", e.getMessage()); // Agora o erro será tratado corretamente
             }
-        } else {
-            System.out.println("A exclusão foi cancelada pelo usuário.");
         }
-    }                              
-
+    }
+    
     @FXML
     private void handleVoltarTelaInicial() {
         try {
@@ -312,34 +191,16 @@ public class VerAgendamentosController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Tela Inicial");
             stage.show();
-
         } catch (IOException e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erro");
-            alert.setHeaderText("Erro ao carregar a tela inicial");
-            alert.setContentText("Houve um erro ao tentar carregar a tela inicial.");
-            alert.showAndWait();
+            exibirErro("Erro ao carregar a tela inicial", "Houve um erro ao tentar carregar a tela inicial.");
         }
     }
 
-    public void handleVerMais() {
-        Agendamento selectedAgendamento = agendamentosTable.getSelectionModel().getSelectedItem();
-
-        if (selectedAgendamento != null) {
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("Motivo Completo");
-            alert.setHeaderText("Motivo do Agendamento:");
-            alert.setContentText(selectedAgendamento.getMotivoConsulta());
-
-            alert.showAndWait();
-        } else {
-            Alert alert = new Alert(AlertType.WARNING);
-            alert.setTitle("Nenhum Agendamento Selecionado");
-            alert.setHeaderText("Por favor, selecione um agendamento.");
-            alert.showAndWait();
-        }
+    private void exibirErro(String titulo, String mensagem) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Erro");
+        alert.setHeaderText(titulo);
+        alert.setContentText(mensagem);
+        alert.showAndWait();
     }
-
-    
 }

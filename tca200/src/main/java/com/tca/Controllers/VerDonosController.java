@@ -152,24 +152,7 @@ public class VerDonosController {
 
     @FXML
     private void handleVoltarTelaInicial() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/tca/Views/TelaInicial.fxml"));
-            Stage stage = new Stage();
-            stage.setScene(new Scene(loader.load()));
-
-            Stage currentStage = (Stage) donosTable.getScene().getWindow();
-            currentStage.close();
-
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Tela Inicial");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erro");
-            alert.setHeaderText("Erro ao carregar a tela inicial");
-            alert.setContentText("Houve um erro ao tentar carregar a tela inicial.");
-            alert.showAndWait();
-        }
+        Stage currentStage = (Stage) voltarButton.getScene().getWindow();
+        currentStage.close(); // Fecha a janela atual
     }
 }

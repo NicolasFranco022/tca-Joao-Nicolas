@@ -105,26 +105,25 @@ public class AgendamentoDAO {
     
         return agendamentos;
     }
-    
-    public void excluirAgendamento(int agendamentoId) {
+
+    public void excluirAgendamento(int agendamentoId) throws SQLException {
         String sql = "DELETE FROM Agendamento WHERE agendamento_id = ?";
+    
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+    
             stmt.setInt(1, agendamentoId);
             int rowsAffected = stmt.executeUpdate();
+    
             if (rowsAffected > 0) {
                 System.out.println("Agendamento excluído com sucesso.");
             } else {
                 System.out.println("Nenhum agendamento encontrado com o ID: " + agendamentoId);
             }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
     
-    public void alterarAgendamento(Agendamento agendamento) {
+    public void alterarAgendamento(Agendamento agendamento) throws SQLException {
         String sql = "UPDATE Agendamento SET data_agendamento = ?, motivo = ? WHERE agendamento_id = ?";
 
         try (Connection conn = DatabaseConnector.getConnection();

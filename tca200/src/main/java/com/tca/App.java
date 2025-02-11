@@ -13,7 +13,7 @@ public class App extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/com/tca/Views/TelaInicial.fxml"));
         
         primaryStage.setTitle("Sistema de Agendamento Veterinário");
-        primaryStage.setScene(new Scene(root, 600, 450));
+        primaryStage.setScene(new Scene(root, 600, 520));
         primaryStage.show();
     }
 
