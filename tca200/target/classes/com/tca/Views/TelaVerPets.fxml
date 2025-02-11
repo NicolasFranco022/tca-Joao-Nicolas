@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tca.Controllers.VerPetsController">
+    <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Lista de Pets" />
+
+    <TableView fx:id="petsTable" prefHeight="400" prefWidth="800">
+        <columns>
+            <TableColumn fx:id="nomePetColumn" prefWidth="200" text="Nome do Pet" />
+            <TableColumn fx:id="racaPetColumn" prefWidth="200" text="Raça" />
+            <TableColumn fx:id="tipoPetColumn" prefWidth="150" text="Tipo" />
+            <TableColumn fx:id="idadePetColumn" prefWidth="100" text="Idade" />
+            <TableColumn fx:id="sexoPetColumn" prefWidth="100" text="Sexo" />
+            <TableColumn fx:id="donoPetColumn" prefWidth="200" text="Dono" /> 
+            <TableColumn fx:id="acaoColumn" prefWidth="150" text="Ações" />
+                                                <!-- Coluna adicionada -->
+        </columns>
+    </TableView>
+
+    <HBox alignment="CENTER" spacing="20">
+        <Button onAction="#handleVoltarTelaInicial" text="Voltar à Tela Inicial" />
+    </HBox>
+</VBox>

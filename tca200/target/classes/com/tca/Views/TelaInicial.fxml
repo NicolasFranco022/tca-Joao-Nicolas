@@ -11,14 +11,30 @@
 
     <VBox alignment="CENTER" layoutX="200" layoutY="120" prefWidth="200" spacing="15">
         
-        <Button fx:id="btnCriarAgendamento" onAction="#CadastrarAgendamentos" prefHeight="50" prefWidth="200" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px; -fx-background-radius: 50; -fx-border-radius: 50;" text="Criar Agendamento" />
+        <Button fx:id="btnCriarAgendamento" onAction="#CadastrarAgendamentos" prefHeight="50" prefWidth="200" 
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px; -fx-background-radius: 50; -fx-border-radius: 50;" 
+                text="Criar Agendamento" />
         
-        <Button fx:id="btnVerAgendamentos" onAction="#VerAgendamentos" prefHeight="50" prefWidth="200" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px; -fx-background-radius: 50; -fx-border-radius: 50;" text="Ver Agendamentos" />
+        <Button fx:id="btnVerAgendamentos" onAction="#VerAgendamentos" prefHeight="50" prefWidth="200" 
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px; -fx-background-radius: 50; -fx-border-radius: 50;" 
+                text="Ver Agendamentos" />
+
+        <Button fx:id="btnCriarDono" onAction="#CadastrarDono" prefHeight="50" prefWidth="200" 
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px; -fx-background-radius: 50; -fx-border-radius: 50;" 
+                text="Criar Dono" />
+
+        <Button fx:id="btnCriarPet" onAction="#CadastrarPet" prefHeight="50" prefWidth="200" 
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px; -fx-background-radius: 50; -fx-border-radius: 50;" 
+                text="Criar Pet" />
         
-        <!-- Novos botões adicionados -->
-        <Button fx:id="btnCriarDono" onAction="#CadastrarDono" prefHeight="50" prefWidth="200" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px; -fx-background-radius: 50; -fx-border-radius: 50;" text="Criar Dono" />
+        <!-- Botões novos seguindo o mesmo estilo -->
+        <Button fx:id="btnVerDonos" onAction="#VerDonos" prefHeight="50" prefWidth="200" 
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px; -fx-background-radius: 50; -fx-border-radius: 50;" 
+                text="Ver Donos" />
         
-        <Button fx:id="btnCriarPet" onAction="#CadastrarPet" prefHeight="50" prefWidth="200" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px; -fx-background-radius: 50; -fx-border-radius: 50;" text="Criar Pet" />
+        <Button fx:id="btnVerPets" onAction="#VerPets" prefHeight="50" prefWidth="200" 
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px; -fx-background-radius: 50; -fx-border-radius: 50;" 
+                text="Ver Pets" />
         
     </VBox>
 </AnchorPane>

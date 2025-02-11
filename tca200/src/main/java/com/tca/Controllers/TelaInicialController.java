@@ -90,5 +90,41 @@ public class TelaInicialController {
             e.printStackTrace();
         }
     }
+    
+    @FXML
+    private void VerDonos() {
+        System.out.println("Clicou no botão Criar Pet");
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/tca/Views/TelaVerDonos.fxml"));
+            Parent root = loader.load();
+            
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root, 400, 300));
+            stage.setTitle("Selecionar Dono");
+            stage.show();
+        } catch (Exception e) {
+            System.out.println("Erro ao abrir a tela de ver dono: " + e.getMessage());
+            e.printStackTrace();
+        }
+   }
+
+   @FXML
+   private void VerPets() {
+       System.out.println("Clicou no botão Criar Pet");
+
+       try {
+           FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/tca/Views/TelaVerPets.fxml"));
+           Parent root = loader.load();
+           
+           Stage stage = new Stage();
+           stage.setScene(new Scene(root, 400, 300));
+           stage.setTitle("Selecionar Pet");
+           stage.show();
+       } catch (Exception e) {
+           System.out.println("Erro ao abrir a tela de ver pet: " + e.getMessage());
+           e.printStackTrace();
+       }
+   }
 
 }

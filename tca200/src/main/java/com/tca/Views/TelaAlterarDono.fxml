@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="250" prefWidth="400" style="-fx-background-color: #FAFAFA;"
+             xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tca.Controllers.AlterarDonoController">
+    
+    <Label fx:id="lblTitulo" layoutX="50" layoutY="20" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Alterar Dados do Dono" />
+
+    <VBox layoutX="50" layoutY="60" prefWidth="300" spacing="10">
+        <Label text="Escolha o campo a alterar:" />
+        <ComboBox fx:id="cmbOpcao" prefWidth="250"/>
+        <TextField fx:id="txtNovoValor" promptText="Novo valor"/>
+    </VBox>
+
+    <VBox layoutX="130" layoutY="170" spacing="10">
+        <Button fx:id="btnSalvar" text="Salvar" onAction="#salvarAlteracao" 
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+        <Button fx:id="btnCancelar" text="Cancelar" onAction="#fecharTela" 
+                style="-fx-background-color: #D32F2F; -fx-text-fill: white;"/>
+    </VBox>
+
+</AnchorPane>
