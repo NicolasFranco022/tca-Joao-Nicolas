@@ -32,7 +32,15 @@ public class AlterarDonoController {
     @FXML
     public void initialize() {
         cmbOpcao.getItems().addAll("Nome", "Telefone", "E-mail");
-        cmbOpcao.setOnAction(event -> txtNovoValor.setPromptText("Novo " + cmbOpcao.getValue().toLowerCase()));
+        cmbOpcao.setOnAction(event -> {
+            txtNovoValor.setPromptText("Novo " + cmbOpcao.getValue().toLowerCase());
+            txtNovoValor.clear(); // Limpa o campo ao trocar a opção
+            txtNovoValor.textProperty().removeListener((obs, oldText, newText) -> {}); // Remove máscara anterior
+            
+            if ("Telefone".equals(cmbOpcao.getValue())) {
+                aplicarMascaraTelefone();
+            }
+        });
     }
 
     public void setDono(Dono dono) {
@@ -79,5 +87,35 @@ public class AlterarDonoController {
     private void fecharTela() {
         Stage stage = (Stage) btnCancelar.getScene().getWindow();
         stage.close();
+    }
+
+    /**
+     * Aplica máscara ao campo de telefone para formatar como (XX) XXXXX-XXXX
+     */
+    private void aplicarMascaraTelefone() {
+        txtNovoValor.textProperty().addListener((obs, oldText, newText) -> {
+            String numeros = newText.replaceAll("[^0-9]", ""); // Remove tudo que não for número
+            
+            if (numeros.length() > 11) {
+                numeros = numeros.substring(0, 11); // Limita a 11 caracteres
+            }
+
+            String telefoneFormatado = formatarTelefone(numeros);
+            txtNovoValor.setText(telefoneFormatado);
+            txtNovoValor.positionCaret(telefoneFormatado.length()); // Mantém o cursor no final
+        });
+    }
+
+    /**
+     * Formata a string para o formato (XX) XXXXX-XXXX
+     */
+    private String formatarTelefone(String numeros) {
+        if (numeros.length() <= 2) {
+            return "(" + numeros;
+        } else if (numeros.length() <= 7) {
+            return "(" + numeros.substring(0, 2) + ") " + numeros.substring(2);
+        } else {
+            return "(" + numeros.substring(0, 2) + ") " + numeros.substring(2, 7) + "-" + numeros.substring(7);
+        }
     }
 }

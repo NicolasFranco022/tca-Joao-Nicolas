@@ -7,14 +7,20 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
 
-
 <VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tca.Controllers.AlterarPetController">
     <Label text="Alterar Pet"/>
     <TextField fx:id="nomeField" promptText="Nome"/>
     <TextField fx:id="racaField" promptText="Raça"/>
     <TextField fx:id="tipoField" promptText="Tipo"/>
     <TextField fx:id="idadeField" promptText="Idade"/>
-    <TextField fx:id="sexoField" promptText="Sexo"/>
+    
+    <!-- Novo layout para selecionar o sexo -->
+    <HBox spacing="10" alignment="CENTER">
+        <Label text="Sexo:"/>
+        <Button fx:id="btnMacho" text="Macho" onAction="#selecionarMacho"/>
+        <Button fx:id="btnFemea" text="Fêmea" onAction="#selecionarFemea"/>
+    </HBox>
+
     <HBox spacing="10">
         <Button fx:id="salvarButton" text="Salvar" onAction="#salvarAlteracoes"/>
         <Button fx:id="cancelarButton" text="Cancelar" onAction="#cancelarAlteracao"/>

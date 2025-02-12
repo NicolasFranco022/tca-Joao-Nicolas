@@ -109,7 +109,8 @@ public class VerPetsController {
             
             AlterarPetController controller = loader.getController();
             controller.setPet(pet);
-            
+            controller.setVerPetsController(this); // Passa a referência
+    
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Alterar Pet");
@@ -118,10 +119,15 @@ public class VerPetsController {
             e.printStackTrace();
         }
     }
-
+    
     @FXML
     private void handleVoltarTelaInicial(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
+
+    public void atualizarListaPets() {
+        carregarPets(); // Recarrega os dados do banco na TableView
+    }
+    
 }
